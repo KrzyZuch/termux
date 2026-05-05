@@ -172,6 +172,7 @@ step_repos() {
     echo ""
     install_pkg "x11-repo" "X11 Repository"
     install_pkg "tur-repo" "TUR Repository"
+    install_pkg "glibc-repo" "Glibc Repository"
 }
 
 # ============== STEP 3: TERMUX-X11 ==============
@@ -244,6 +245,7 @@ step_apps() {
     install_pkg "curl" "cURL"
     install_pkg "imagemagick" "ImageMagick (wallpaper)"
     install_pkg "code-oss" "VS Code (code-oss)"
+    install_pkg "glibc" "Glibc Compatibility"
 }
 
 # ============== STEP 8: PYTHON ==============
