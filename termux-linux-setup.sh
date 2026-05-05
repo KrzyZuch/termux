@@ -221,7 +221,8 @@ step_gpu() {
     if [ "$GPU_DRIVER" == "freedreno" ]; then
         install_pkg "mesa-vulkan-icd-freedreno" "Turnip Adreno Driver"
     fi
-    install_pkg "vulkan-loader-android" "Vulkan Loader"
+    install_pkg "vulkan-loader" "Vulkan Loader"
+    install_pkg "vulkan-tools" "Vulkan Tools"
 }
 
 # ============== STEP 6: AUDIO ==============
@@ -1071,6 +1072,11 @@ COMPLETE
     echo -e "  ${GREEN}Stop everything:${NC}"
     echo -e "    ${WHITE}bash ~/stop-linux.sh${NC}"
     echo ""
+    echo -e "${YELLOW}============================================================${NC}"
+    echo -e "${RED}  CRASH FIX (Signal 9):${NC}"
+    echo -e "  If the terminal says 'Process completed (signal 9)', it's Android's"
+    echo -e "  Phantom Process Killer. Connect phone to PC and run via ADB:"
+    echo -e "  ${WHITE}adb shell \"/system/bin/device_config put activity_manager max_phantom_processes 2147483647\"${NC}"
     echo -e "${YELLOW}============================================================${NC}"
     echo ""
     echo -e "${CYAN}  👤 Your username : ${WHITE}${SETUP_USERNAME}${NC}"
