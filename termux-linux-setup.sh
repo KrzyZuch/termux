@@ -368,6 +368,8 @@ BINDS=""
 [ -d "\$TERMUX_TMP/.X11-unix" ] && BINDS="\$BINDS --bind \$TERMUX_TMP/.X11-unix:/tmp/.X11-unix"
 [ -d "/dev/dri" ]               && BINDS="\$BINDS --bind /dev/dri:/dev/dri"
 [ -e "/dev/kgsl-3d0" ]          && BINDS="\$BINDS --bind /dev/kgsl-3d0:/dev/kgsl-3d0"
+[ -d "/sdcard" ]               && BINDS="\$BINDS --bind /sdcard:/sdcard"
+[ -d "$HOME" ]                  && BINDS="\$BINDS --bind $HOME:/termux-home"
 [ -d "${TERMUX_VK_ICD}" ]       && BINDS="\$BINDS --bind ${TERMUX_VK_ICD}:/usr/share/vulkan/icd.d.termux"
 [ -f "${TERMUX_LIB}/libvulkan.so" ] && \
     BINDS="\$BINDS --bind ${TERMUX_LIB}/libvulkan.so:/usr/lib/aarch64-linux-gnu/libvulkan_termux.so"
@@ -496,8 +498,8 @@ LOG="\$TERMUX_TMP/proot-${appname}.log"
 BINDS=""
 X11_DIR="\$TERMUX_TMP/.X11-unix"
 [ -d "\$X11_DIR" ]     && BINDS="\$BINDS --bind \$X11_DIR:/tmp/.X11-unix"
-[ -d "/dev/dri" ]      && BINDS="\$BINDS --bind /dev/dri:/dev/dri"
-[ -e "/dev/kgsl-3d0" ] && BINDS="\$BINDS --bind /dev/kgsl-3d0:/dev/kgsl-3d0"
+[ -d "/sdcard" ]      && BINDS="\$BINDS --bind /sdcard:/sdcard"
+[ -d "$HOME" ]       && BINDS="\$BINDS --bind $HOME:/termux-home"
 
 {
 echo "[+] Launching $appname at \$(date)"
@@ -928,18 +930,24 @@ Type=Application
 Terminal=false
 EOF
 
-    cat > ~/Desktop/VSCode.desktop << EOF
+    cat > ~/Desktop/PhoneStorage.desktop << 'EOF'
 [Desktop Entry]
-Name=VS Code
-Comment=Visual Studio Code (code-oss)
-Exec=code-oss --no-sandbox
-Icon=code-oss
+Name=Phone Storage
+Exec=thunar /sdcard
+Icon=folder-remote
 Type=Application
-Terminal=false
+EOF
+
+    cat > ~/Desktop/TermuxHome.desktop << 'EOF'
+[Desktop Entry]
+Name=Termux Home
+Exec=thunar /termux-home
+Icon=folder-home
+Type=Application
 EOF
 
     chmod +x ~/Desktop/*.desktop 2>/dev/null
-    echo -e "  [+] Shortcuts: Firefox, Files, Terminal, Proot, VS Code"
+    echo -e "  [+] Shortcuts: Firefox, Files, Terminal, Proot, VS Code, Phone & Termux Storage"
 }
 
 # ============== VNC (OPTIONAL — asked at end) ==============
