@@ -476,6 +476,11 @@ for desktop_file in "$PROOT_APPS"/*.desktop; do
     echo "$appname" | grep -qi "libreoffice\|soffice" && \
         APP_CMD="$CLEAN_EXEC --norestore --nofirststartwizard"
 
+    if echo "$appname" | grep -qi "code"; then
+        APP_CMD="$CLEAN_EXEC --no-sandbox --user-data-dir=/root/.vscode-root"
+        echo "  [+] VS Code: Sandbox fix applied"
+    fi
+
     if echo "$appname" | grep -qi "blender"; then
         APP_CMD="$CLEAN_EXEC"
         if "$PROOT_BIN" login "$PROOT_DISTRO" -- \
