@@ -511,6 +511,7 @@ for desktop_file in "$PROOT_APPS"/*.desktop; do
 #!/data/data/com.termux/files/usr/bin/bash
 PROOT_BIN="$PROOT_BIN"
 PROOT_DISTRO="$PROOT_DISTRO"
+PROOT_USER="$PROOT_USER"
 TERMUX_TMP="\${TMPDIR:-/data/data/com.termux/files/usr/tmp}"
 LOG="\$TERMUX_TMP/proot-${appname}.log"
 
