@@ -148,7 +148,7 @@ setup_environment() {
     echo -e "\n${GREEN}[+] Selected: ${DE_NAME}${NC}"
 
     # ---- Username ----
-    SETUP_USERNAME="root"
+    SETUP_USERNAME="user"
     echo -e "  ${GREEN}[+] Proot User set to: ${SETUP_USERNAME} (Default)${NC}"
     sleep 1
 }
@@ -395,7 +395,7 @@ echo " Type 'exit' to leave proot."
 echo ""
 RCEOF
 
-proot-distro login "\$PROOT_DISTRO" \$BINDS --user root -- bash --rcfile "\$_RC"
+proot-distro login "\$PROOT_DISTRO" \$BINDS --user $SETUP_USERNAME -- bash --rcfile "\$_RC"
 rm -f "\$_RC"
 PROOTEOF
     chmod +x ~/start-proot.sh
@@ -412,6 +412,7 @@ PROOTEOF
 # ============================================================
 
 PROOT_DISTRO="${1:-ubuntu}"
+PROOT_USER="${2:-user}"
 PROOT_BIN="/data/data/com.termux/files/usr/bin/proot-distro"
 PROOT_ROOTFS="/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/$PROOT_DISTRO"
 PROOT_APPS="$PROOT_ROOTFS/usr/share/applications"
@@ -477,8 +478,22 @@ for desktop_file in "$PROOT_APPS"/*.desktop; do
         APP_CMD="$CLEAN_EXEC --norestore --nofirststartwizard"
 
     if echo "$appname" | grep -qi "code"; then
-        APP_CMD="$CLEAN_EXEC --no-sandbox --user-data-dir=/root/.vscode-root"
+        if [ "$PROOT_USER" = "root" ]; then
+            APP_CMD="$CLEAN_EXEC --no-sandbox --user-data-dir=/root/.vscode-root"
+        else
+            APP_CMD="$CLEAN_EXEC --no-sandbox"
+        fi
         echo "  [+] VS Code: Sandbox fix applied"
+    fi
+
+    if echo "$appname" | grep -qi "synaptic"; then
+        APP_CMD="sudo synaptic"
+        echo "  [+] Synaptic: Sudo fix applied"
+    fi
+
+    if echo "$appname" | grep -qi "gdebi"; then
+        APP_CMD="sudo gdebi-gtk"
+        echo "  [+] GDebi: Sudo fix applied"
     fi
 
     if echo "$appname" | grep -qi "blender"; then
@@ -509,7 +524,7 @@ X11_DIR="\$TERMUX_TMP/.X11-unix"
 {
 echo "[+] Launching $appname at \$(date)"
 echo "    X11=\$X11_DIR  BINDS=\$BINDS"
-\$PROOT_BIN login "\$PROOT_DISTRO" \$BINDS -- /bin/bash -c "
+\$PROOT_BIN login "\$PROOT_DISTRO" \$BINDS --user "\$PROOT_USER" -- /bin/bash -c "
 export DISPLAY=:0
 export XDG_RUNTIME_DIR=/tmp
 export MESA_NO_ERROR=1
@@ -550,7 +565,7 @@ SYNCEOF
     echo -e "  [+] Created ~/proot-menu-sync.sh"
 
     # Run once during install
-    bash ~/proot-menu-sync.sh "$PROOT_DISTRO" 2>/dev/null || true
+    bash ~/proot-menu-sync.sh "$PROOT_DISTRO" "$SETUP_USERNAME" 2>/dev/null || true
 }
 
 # ============== STEP 10: LAUNCHERS ==============
@@ -635,7 +650,7 @@ sleep 3
 export DISPLAY=:0
 
 # Sync proot apps into menu (background, non-blocking)
-[ -f ~/proot-menu-sync.sh ] && bash ~/proot-menu-sync.sh > /dev/null 2>&1 &
+[ -f ~/proot-menu-sync.sh ] && bash ~/proot-menu-sync.sh "$PROOT_DISTRO" "$SETUP_USERNAME" > /dev/null 2>&1 &
 
 echo "----------------------------------------------"
 echo "  [*] Open the Termux-X11 app to see desktop"
