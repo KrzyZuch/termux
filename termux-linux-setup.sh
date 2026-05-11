@@ -244,7 +244,6 @@ step_apps() {
     install_pkg "wget" "Wget"
     install_pkg "curl" "cURL"
     install_pkg "imagemagick" "ImageMagick (wallpaper)"
-    install_pkg "code-oss" "VS Code (code-oss)"
     install_pkg "glibc" "Glibc Compatibility"
 }
 
@@ -967,7 +966,7 @@ Type=Application
 EOF
 
     chmod +x ~/Desktop/*.desktop 2>/dev/null
-    echo -e "  [+] Shortcuts: Firefox, Files, Terminal, Proot, VS Code, Phone & Termux Storage"
+    echo -e "  [+] Shortcuts: Firefox, Files, Terminal, Proot, Phone & Termux Storage"
 }
 
 # ============== VNC (OPTIONAL — asked at end) ==============
@@ -1075,7 +1074,7 @@ COMPLETE
     echo -e "${WHITE}[*] ${DE_NAME} desktop is ready.${NC}"
     echo ""
     echo -e "${CYAN}[*] Installed:${NC}"
-    echo "    - Firefox, VS Code (code-oss), Git, Python 3"
+    echo "    - Firefox, Git, Python 3"
     echo "    - GPU Acceleration (Turnip/Zink)"
     echo "    - Proot Linux Container + App Bridge"
     echo "    - Modern Dark XFCE Theme (Adwaita + Dracula terminal)"
